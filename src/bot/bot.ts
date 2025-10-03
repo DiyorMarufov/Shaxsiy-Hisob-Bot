@@ -1,10 +1,30 @@
-import { Bot } from "grammy";
-import { BOT_TOKEN } from "./config";
+import { Bot, session } from "grammy";
+import { conversations } from "@grammyjs/conversations";
+import { MyContext, initialSession } from "../types";
+
+import addExpenseCommand from "./commands/add-expense";
 import startCommand from "./commands/start";
+import { createTables } from "./migrations/createTables";
+import addIncomeCommand from "./commands/add-income";
+import balanceCommand from "./commands/balance";
+import reportCommand from "./commands/report";
+import notifyMiddleware from "./commands/notify";
+import setLimitCommand from "./commands/set-limit";
 
-const bot = new Bot(BOT_TOKEN);
+const bot = new Bot<MyContext>(process.env.BOT_TOKEN!);
 
-// Commands
+bot.use(session({ initial: initialSession }));
+bot.use(conversations());
+
+createTables();
+
 startCommand(bot);
+addExpenseCommand(bot);
+addIncomeCommand(bot);
+balanceCommand(bot);
+reportCommand(bot);
+setLimitCommand(bot);
 
-export default bot;
+bot.use(notifyMiddleware());
+
+export { bot };
