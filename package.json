@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "grammy": "^1.38.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.6.2"
+  }
+}
